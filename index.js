@@ -1,7 +1,9 @@
-var express = require("express")
-var bodyParser = require("body-parser")
-var fs = require("fs")
-var app = express()
+const express = require("express")
+const bodyParser = require("body-parser")
+const fs = require("fs")
+const {authenticate} = require("./authenticate")
+const app = express()
+
 
 app.get('/' ,(request,response) => {
     console.log('homefinderpictures ...')
@@ -11,7 +13,8 @@ app.get('/' ,(request,response) => {
 app.use('/images', express.static('images'))
 
 app.use(bodyParser.urlencoded({ extended: true, limit: "50mb" }))
-app.post("/image", (request, response) => {
+
+app.post("/image", authenticate, (request, response) => {
   var name = request.body.name
   console.log(`POST /image name = ${name}`)
   var image = request.body.image
